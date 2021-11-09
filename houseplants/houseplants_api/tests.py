@@ -51,9 +51,9 @@ def test_plants_to_care_query_with_plants_and_no_logs():
 
 
 def test_plants_to_care_query_with_results():
-    plan_a = WateringLogFactory(next_suggested_date=date.today())
-    plan_b = WateringLogFactory(next_suggested_date=date.today() - timedelta(days=3))
-    plan_c = WateringLogFactory(next_suggested_date=date.today() + timedelta(days=3))
+    log_a = WateringLogFactory(next_suggested_date=date.today())
+    log_b = WateringLogFactory(next_suggested_date=date.today() - timedelta(days=3))
+    log_c = WateringLogFactory(next_suggested_date=date.today() + timedelta(days=3))
 
     client = Client(schema)
     executed = client.execute(
@@ -72,17 +72,17 @@ def test_plants_to_care_query_with_results():
     assert len(plants_to_care) == 2
 
     plant_ids = [int(plant['id']) for plant in plants_to_care]
-    assert plant_ids == [plan_a.plant.id, plan_b.plant.id]
+    assert plant_ids == [log_a.plant.id, log_b.plant.id]
 
 
 def test_water_plant_mutation():
-    PlantFactory(id=1)
+    PlantFactory(id=123)
 
     client = Client(schema)
     executed = client.execute(
         '''
         mutation {
-            waterPlant(plantId: 1) {
+            waterPlant(plantId: 123) {
                 wateringLog {
                     plant {
                         id
@@ -95,5 +95,5 @@ def test_water_plant_mutation():
         '''
     )
     log = executed['data']['waterPlant']['wateringLog']
-    assert log['plant']['id'] == '1'
+    assert log['plant']['id'] == '123'
     assert log['waterDate'] == date.today().strftime('%Y-%m-%d')
