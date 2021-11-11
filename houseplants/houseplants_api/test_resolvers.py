@@ -36,7 +36,7 @@ def test_resolve_plants_to_care_with_plants_and_no_logs():
     assert plant.id in result.values_list('id', flat=True)
 
 
-def test_resolve_plants_to_care_with_results():
+def test_resolve_plants_to_care_with_watering_logs():
     log_a = WateringLogFactory(next_suggested_date=date.today())
     log_b = WateringLogFactory(next_suggested_date=date.today() - timedelta(days=3))
     log_c = WateringLogFactory(next_suggested_date=date.today() + timedelta(days=3))
@@ -46,6 +46,9 @@ def test_resolve_plants_to_care_with_results():
     assert len(result) == 2
     plant_ids = result.values_list('id', flat=True)
     assert set(plant_ids) == set([log_a.plant.id, log_b.plant.id])
+
+    care_types = result.values_list('care_type', flat=True)
+    assert set(care_types) == set(['water'])
 
 
 def test_resolve_water_plant():
