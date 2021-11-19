@@ -6,7 +6,7 @@ from .resolvers import (
     resolve_plants_to_care,
     resolve_water_plant,
 )
-from .test_factories import PlantFactory, WateringLogFactory
+from .test_factories import PlantFactory, CleaningLogFactory, WateringLogFactory
 
 
 pytestmark = pytest.mark.django_db
@@ -32,7 +32,7 @@ def test_resolve_plants_to_care_with_plants_and_no_logs():
 
     result = resolve_plants_to_care()
 
-    assert len(result) == 1
+    assert len(result) == 2
     assert plant.id in result.values_list('id', flat=True)
 
 
@@ -41,14 +41,20 @@ def test_resolve_plants_to_care_with_watering_logs():
     log_b = WateringLogFactory(next_suggested_date=date.today() - timedelta(days=3))
     log_c = WateringLogFactory(next_suggested_date=date.today() + timedelta(days=3))
 
+    CleaningLogFactory(plant=log_a.plant, next_suggested_date=date.today())
+    CleaningLogFactory(plant=log_b.plant, next_suggested_date=date.today() - timedelta(days=3))
+    CleaningLogFactory(plant=log_c.plant, next_suggested_date=date.today() + timedelta(days=3))
+
     result = resolve_plants_to_care()
 
-    assert len(result) == 2
+    num_plants_to_water = 2
+    num_plants_to_clean = 2
+    assert len(result) == num_plants_to_water + num_plants_to_clean
     plant_ids = result.values_list('id', flat=True)
     assert set(plant_ids) == set([log_a.plant.id, log_b.plant.id])
 
-    care_types = result.values_list('care_type', flat=True)
-    assert set(care_types) == set(['water'])
+    care_types = [plant.care_type for plant in result]
+    assert set(care_types) == set(['clean', 'water'])
 
 
 def test_resolve_water_plant():

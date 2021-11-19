@@ -24,3 +24,14 @@ class WateringLog(models.Model):
     def save(self, *args, **kwargs):
         # self.next_suggested_date = date.today() + timedelta(7)
         super().save(*args, **kwargs)
+
+
+class CleaningLog(models.Model):
+    plant = models.ForeignKey(
+        Plant, on_delete=models.CASCADE
+    )
+    clean_date = models.DateField(auto_now_add=True)
+    next_suggested_date = models.DateField()
+
+    def __str__(self):
+        return f'{self.plant.name} may need cleaning on {self.next_suggested_date}'
