@@ -1,7 +1,7 @@
 - Create refactoring journey
-  - Add CleaningLog models
-  - Add plants to clean into plantsToCare query
-  - Add cleanPlant mutation
+  - [x] Add CleaningLog models
+  - [x] Add plants to clean into plantsToCare query
+  - [ ] Add cleanPlant mutation
 
   - Rearchitecture - introduce another layer, e.g. action/controller between resolvers and models
 
