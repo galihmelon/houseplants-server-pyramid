@@ -4,6 +4,7 @@ import pytest
 from .resolvers import (
     resolve_all_plants,
     resolve_plants_to_care,
+    resolve_clean_plant,
     resolve_water_plant,
 )
 from .test_factories import PlantFactory, CleaningLogFactory, WateringLogFactory
@@ -64,3 +65,12 @@ def test_resolve_water_plant():
 
     assert result.plant.id == 123
     assert result.water_date == date.today()
+
+
+def test_resolve_clean_plant():
+    PlantFactory(id=123)
+
+    result = resolve_clean_plant(plant_id=123)
+
+    assert result.plant.id == 123
+    assert result.clean_date == date.today()

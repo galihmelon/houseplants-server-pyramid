@@ -102,3 +102,27 @@ def test_water_plant_mutation():
     log = executed['data']['waterPlant']['wateringLog']
     assert log['plant']['id'] == '123'
     assert log['waterDate'] == date.today().strftime('%Y-%m-%d')
+
+
+def test_clean_plant_mutation():
+    PlantFactory(id=123)
+
+    client = Client(schema)
+    executed = client.execute(
+        '''
+        mutation {
+            cleanPlant(plantId: 123) {
+                cleaningLog {
+                    plant {
+                        id
+                    }
+                    nextSuggestedDate
+                    cleanDate
+                }
+            }
+        }
+        '''
+    )
+    log = executed['data']['cleanPlant']['cleaningLog']
+    assert log['plant']['id'] == '123'
+    assert log['cleanDate'] == date.today().strftime('%Y-%m-%d')

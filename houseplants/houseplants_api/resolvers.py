@@ -34,6 +34,12 @@ def resolve_plants_to_care():
     return plants_to_clean.union(plants_to_water)
 
 
+def resolve_clean_plant(plant_id):
+    plant = Plant.objects.get(id=plant_id)
+    log = CleaningLog.objects.create(plant=plant, next_suggested_date=date.today() + timedelta(days=7))
+    return log
+
+
 def resolve_water_plant(plant_id):
     plant = Plant.objects.get(id=plant_id)
     log = WateringLog.objects.create(plant=plant, next_suggested_date=date.today() + timedelta(days=7))
