@@ -47,9 +47,6 @@ def test_resolve_plants_to_care_with_watering_logs():
     plant_ids = result.values_list('id', flat=True)
     assert set(plant_ids) == set([log_a.plant.id, log_b.plant.id])
 
-    care_types = result.values_list('care_type', flat=True)
-    assert set(care_types) == set(['water'])
-
 
 def test_resolve_water_plant():
     PlantFactory(id=123)

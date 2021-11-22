@@ -9,17 +9,9 @@ def resolve_all_plants():
 
 
 def resolve_plants_to_care():
-    plants_to_water = WateringLog.objects.filter(next_suggested_date__lte=date.today()).values('plant').annotate(last_suggested_date=Max('next_suggested_date'))
-    plants_without_watering_logs = Plant.objects.filter(wateringlog__isnull=True)
-    plants_to_water = (
-        Plant.objects
-        .filter(id__in=(
-            [plant['plant'] for plant in plants_to_water]
-            + [plant.id for plant in plants_without_watering_logs]
-        ))
-        .annotate(care_type=Value('water', output_field=CharField()))
-    )
-    return plants_to_water
+    plants = WateringLog.objects.filter(next_suggested_date__lte=date.today()).values('plant').annotate(last_suggested_date=Max('next_suggested_date'))
+    plants_without_logs = Plant.objects.filter(wateringlog__isnull=True)
+    return Plant.objects.filter(id__in=([plant['plant'] for plant in plants] + [plant.id for plant in plants_without_logs]))
 
 
 def resolve_water_plant(plant_id):

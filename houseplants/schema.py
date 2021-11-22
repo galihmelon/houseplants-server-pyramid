@@ -9,20 +9,11 @@ from houseplants_api.resolvers import (
     resolve_water_plant,
 )
 
-class CareType(graphene.Enum):
-    CLEAN = 'clean'
-    WATER = 'water'
-
 
 class PlantType(DjangoObjectType):
-    care_type = CareType(required=True)
-
     class Meta:
         model = Plant
         fields = ("id", "name", "image_url", "description")
-
-    def resolve_care_type(self, info):
-        return self.care_type
 
 
 class WateringLogType(DjangoObjectType):
