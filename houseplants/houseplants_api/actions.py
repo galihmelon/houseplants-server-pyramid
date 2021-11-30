@@ -36,11 +36,15 @@ def get_plants_to_care():
 
 def clean_plant(plant_id):
     plant = Plant.objects.get(id=plant_id)
-    log = CleaningLog.objects.create(plant=plant, next_suggested_date=date.today() + timedelta(days=7))
+    log = CleaningLog.objects.create(
+        plant=plant,
+        next_suggested_date=date.today() + timedelta(days=7))
     return log
 
 
 def water_plant(plant_id):
     plant = Plant.objects.get(id=plant_id)
-    log = WateringLog.objects.create(plant=plant, next_suggested_date=date.today() + timedelta(days=7))
+    log = WateringLog.objects.create(
+        plant=plant,
+        next_suggested_date=date.today() + timedelta(days=7))
     return log
