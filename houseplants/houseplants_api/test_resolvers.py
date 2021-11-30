@@ -59,15 +59,6 @@ def test_resolve_plants_to_care_with_watering_logs():
     assert set(care_types) == set(['clean', 'water'])
 
 
-def test_resolve_water_plant():
-    PlantFactory(id=123)
-
-    result = resolve_water_plant(plant_id=123)
-
-    assert result.plant.id == 123
-    assert result.water_date == date.today()
-
-
 def test_resolve_clean_plant():
     PlantFactory(id=123)
 
@@ -75,3 +66,12 @@ def test_resolve_clean_plant():
 
     assert result.plant.id == 123
     assert result.clean_date == date.today()
+
+
+def test_resolve_water_plant():
+    PlantFactory(id=123)
+
+    result = resolve_water_plant(plant_id=123)
+
+    assert result.plant.id == 123
+    assert result.water_date == date.today()
